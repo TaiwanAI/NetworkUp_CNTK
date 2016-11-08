@@ -1,25 +1,17 @@
-TextTeaser
+Guidance
 =============
 
-TextTeaser is an automatic summarization algorithm.
+This feature is based on TextTeaser(https://github.com/MojoJolo/textteaser)
 
-This is now the official version of TextTeaser. Future developments of TextTeaser will be in this repository.
-
-The original Scala TextTeaser can still be accessed [here](https://github.com/MojoJolo/textteaser).
+Make sure you have Node installed in your local before start using.
 
 ### Installation
 
-    >>> git clone https://github.com/DataTeaser/textteaser.git
-    >>> pip install -r textteaser/requirements.txt
+    >>> git clone https://github.com/TaiwanAI/NetworkUp_CNTK.git
+    >>> cd NetworkUp_CNTK/postSummarization/
+    >>> npm install
 
 ### How to Use
 
-    >>> from textteaser import TextTeaser
-    >>> tt = TextTeaser()
-    >>> tt.summarize(title, text)
-
-You can also test TextTeaser by running `python test.py`.
-
-### Commercial Support
-
-Commercial support for TextTeaser or custom summarizers can be provided by [DataTeaser](http://www.datateaser.com/?textteaser).
+    >>> node app.js
+    Open your browser, key in URL as "localhost:3000"
