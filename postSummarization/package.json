@@ -1,0 +1,24 @@
+{
+  "name": "textteaser",
+  "version": "1.0.0",
+  "description": "TextTeaser =============",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DataTeaser/textteaser.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DataTeaser/textteaser/issues"
+  },
+  "homepage": "https://github.com/DataTeaser/textteaser#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "python-shell": "^0.4.0"
+  }
+}
