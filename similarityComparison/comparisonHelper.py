@@ -11,7 +11,7 @@ class ComparisonHelper:
 		the help of a sigmoid function, which returns a value between 0 and 1, and posts the data to
 		postUrl
 	'''
-	def compare(self, getUrl, postUrl userId):
+	def compare(self, getUrl, postUrl, userId):
 		r = requests.get(url)		
 		#each feature will have value -1 or 1. The features are marked 1 if the attendee possesses this feature (e.g. art)
 		featuresList = r.json()['features']
