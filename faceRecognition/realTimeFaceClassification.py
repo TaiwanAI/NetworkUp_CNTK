@@ -24,6 +24,7 @@ modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 serverAttendeeRoot = "https://NetworkUp/Attendee"
+
 class Arg:
     def __init__(self, dlibFacePredictor = os.path.join(
             dlibModelDir,
@@ -43,7 +44,7 @@ class Arg:
 '''
     getRep returns the feature of each faces
 '''
-def getRep(bgrImg):
+def getRep(bgrImg, net):
     start = time.time()
     if bgrImg is None:
         raise Exception("Unable to load image/frame")
@@ -85,7 +86,7 @@ def getRep(bgrImg):
 
 '''
     infer() returns the predicted people in the frame as well as 
-    the corresponding information (e.g. summary of shared posts) stored in server.
+    the corresponding information (e.g. summary of shared posts and similarty between he/she and you) stored in server.
 '''
 def infer(img, args):
     #assume all attendee profile pictures have been downloaded into ./attendee/, with attendee id being file name
@@ -100,20 +101,18 @@ def infer(img, args):
     net = openface.TorchNeuralNet(args.networkModel, args.imgDim)
     reps = getRep(img, net) #return the detected and aligned faces in the video frame
     persons = []
-    
-
+    infos = []
+    similarities = []
     for rep in reps:
         try:
             rep = rep.reshape(1, -1)
         except:
             print "No Face detected"
-            return (None, None)
+            return (None, None, None)
         start = time.time()
 
-
-        distances = clf.predict_proba(rep).ravel()
         for attendee_img in image_list:
-            d = rep-getRep(attendee_img)
+            d = rep-getRep(attendee_img, net)
             distances.append(np.dot(d,d))
         # print predictions
         minI = np.argmin(distances) #Returns the indices of the maximum values along an axis.
@@ -122,10 +121,12 @@ def infer(img, args):
         r = requests.get(url)
         person = r.json()['name']
         info = r.json()['info']
+        similarity = r.json()['similarity']
         persons.append(person)
         infos.append(info)
+        similarities.append(similarity)
         
-    return (persons, infos)
+    return (persons, infos,similarities)
 
 
 if __name__ == '__main__':
@@ -147,11 +148,18 @@ if __name__ == '__main__':
 
     while True:
         ret, frame = video_capture.read()
-        persons, infos = infer(frame, args)
-        
-        cv2.putText(frame, "Name: {} Info: {}".format(persons, infoss),
-                    (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-        cv2.imshow('', frame)
+        persons, infos, similarities = infer(frame, args)
+        if persons == None: continue
+        for i, value in enumerate(similarities):
+            #if the similarities between you and this attendee is greater than 0.7, mark green
+            if similarities[i] > 0.7: 
+                cv2.putText(frame, "Name: {} Info: {}".format(person, info),
+                            (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+            #otherwise, mark white
+            else:
+                cv2.putText(frame, "Name: {} Info: {}".format(person, info),
+                            (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+            cv2.imshow('', frame)
         # quit the program on the press of key 'q'
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
