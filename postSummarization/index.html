@@ -9,10 +9,22 @@
     <form action="/myform" method="GET">
       Title: <input type="text" name="mytitle" required />
       <br/>
-      Raw Paragraph: <input type="textarea" name="mytext" required />
+      Raw Paragraph: <input type="text" name="mytext" required />
       <br/>
       <input type="submit" value="Submit" />
     </form>
+
+    <hr/>
+
+    <form action="/mytweets" method="GET">
+      consumer_key: <input type="text" name="consumer_key" required /> <br/>
+      consumer_secret: <input type="text" name="consumer_secret" required /> <br/>
+      access_token_key: <input type="text" name="access_token_key" required /> <br/>
+      access_token_secret: <input type="text" name="access_token_secret" required /> <br/>
+      <b>Target's Twitter_id:</b> <input type="text" name="screen_name" required /> <br/>
+      <input type="submit" value="Submit" />
+    </form>
+
   </body>
 
 </html>
